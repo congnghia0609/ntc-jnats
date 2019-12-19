@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
  * @author nghiatc
  * @since Dec 19, 2019
  */
-public class MainApp {
-    private static final Logger log = LoggerFactory.getLogger(MainApp.class);
+public class Pub {
+    private static final Logger log = LoggerFactory.getLogger(Pub.class);
 
     /**
      * @param args the command line arguments
@@ -39,7 +39,5 @@ public class MainApp {
             NPub.getInstance("pub-notify").publish(subj, msg);
             log.info("Published PubSub ["+subj+"] : '"+msg+"'");
         }
-        
     }
-
 }
