@@ -21,7 +21,6 @@ import com.ntc.jnats.NConnection;
 import io.nats.client.Dispatcher;
 import io.nats.client.Message;
 import io.nats.client.MessageHandler;
-import io.nats.client.Subscription;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
@@ -40,7 +39,6 @@ public abstract class NWorker implements Runnable {
     private String subject;
     private NConnection nconn;
     private Dispatcher dispatcher;
-    private Subscription subt;
 
     public NWorker(String name) throws IOException, InterruptedException {
         this.group = NConfig.getConfig().getString(name+".group", name);
@@ -68,10 +66,6 @@ public abstract class NWorker implements Runnable {
     public Dispatcher getDispatcher() {
         return dispatcher;
     }
-
-    public Subscription getSubt() {
-        return subt;
-    }
     
     // Stop receive message SAFE.
     public CompletableFuture<Boolean> drain() throws InterruptedException {
@@ -97,14 +91,6 @@ public abstract class NWorker implements Runnable {
     @Override
     public void run() {
         try {
-//            subt = nconn.getConnection().subscribe(subject, group);
-//            dispatcher = subt.getDispatcher();
-//            dispatcher.subscribe(subject, group, new MessageHandler() {
-//                @Override
-//                public void onMessage(Message msg) throws InterruptedException {
-//                    execute(msg.getData());
-//                }
-//            });
             dispatcher = nconn.getConnection().createDispatcher(new MessageHandler() {
                 @Override
                 public void onMessage(Message msg) throws InterruptedException {
