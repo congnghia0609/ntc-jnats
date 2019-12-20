@@ -62,7 +62,6 @@ public class Sub {
                 log.error(e.getMessage(), e);
             }
         }
-        
     }
 
 }

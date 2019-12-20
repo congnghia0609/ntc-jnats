@@ -34,19 +34,19 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class NSub implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(NSub.class);
-    private String name;
+    private String id;
     private String subject;
     private NConnection nconn;
     private Dispatcher dispatcher;
 
     public NSub(String name) throws IOException, InterruptedException {
-        this.name = name;
         this.subject = NConfig.getConfig().getString(name+".subject", name);
         this.nconn = new NConnection(name);
+        this.id = this.nconn.getOpt().getConnectionName();
     }
 
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
     }
 
     public String getSubject() {
