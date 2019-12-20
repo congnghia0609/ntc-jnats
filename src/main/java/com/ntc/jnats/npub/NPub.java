@@ -99,7 +99,18 @@ public class NPub {
         this.nConn.close();
     }
     
-    public void publish(String subject, String msg) {
-        this.nConn.getConnection().publish(subject, msg.getBytes(StandardCharsets.UTF_8));
+    public int publish(String subject, String msg) {
+        int err = -1;
+        try {
+            if (!subject.isEmpty() && !msg.isEmpty()) {
+                this.nConn.getConnection().publish(subject, msg.getBytes(StandardCharsets.UTF_8));
+                err = 0;
+            }
+        } catch (Exception e) {
+            err = -1;
+            log.error(e.getMessage(), e);
+        } finally {
+            return err;
+        }
     }
 }
