@@ -16,11 +16,106 @@
 
 package com.ntc.jnats.nworker;
 
+import com.ntc.configer.NConfig;
+import com.ntc.jnats.NConnection;
+import io.nats.client.Dispatcher;
+import io.nats.client.Message;
+import io.nats.client.MessageHandler;
+import io.nats.client.Subscription;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  *
  * @author nghiatc
  * @since Dec 19, 2019
  */
-public class NWorker {
+public abstract class NWorker implements Runnable {
+    private static final Logger log = LoggerFactory.getLogger(NWorker.class);
+    private String id;
+    private String group;
+    private String subject;
+    private NConnection nconn;
+    private Dispatcher dispatcher;
+    private Subscription subt;
 
+    public NWorker(String name) throws IOException, InterruptedException {
+        this.group = NConfig.getConfig().getString(name+".group", name);
+        this.subject = NConfig.getConfig().getString(name+".subject", name);
+        this.nconn = new NConnection(name);
+        this.id = this.nconn.getOpt().getConnectionName();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public NConnection getNConn() {
+        return nconn;
+    }
+
+    public Dispatcher getDispatcher() {
+        return dispatcher;
+    }
+
+    public Subscription getSubt() {
+        return subt;
+    }
+    
+    // Stop receive message SAFE.
+    public CompletableFuture<Boolean> drain() throws InterruptedException {
+        if (dispatcher != null) {
+            return dispatcher.drain(Duration.ZERO); // The time to wait for the drain to succeed, pass 0 to wait forever.
+        }
+        return null;
+    }
+    
+    // Stop receive message UNSAFE.
+    public void unsubscribe() {
+        if (dispatcher != null) {
+            dispatcher.unsubscribe(subject);
+        }
+    }
+    
+    public void close() throws InterruptedException{
+        nconn.close();
+    }
+
+    public abstract void execute(byte[] data);
+    
+    @Override
+    public void run() {
+        try {
+//            subt = nconn.getConnection().subscribe(subject, group);
+//            dispatcher = subt.getDispatcher();
+//            dispatcher.subscribe(subject, group, new MessageHandler() {
+//                @Override
+//                public void onMessage(Message msg) throws InterruptedException {
+//                    execute(msg.getData());
+//                }
+//            });
+            dispatcher = nconn.getConnection().createDispatcher(new MessageHandler() {
+                @Override
+                public void onMessage(Message msg) throws InterruptedException {
+                    execute(msg.getData());
+                }
+            });
+            dispatcher.subscribe(subject, group);
+            nconn.getConnection().flush(Duration.ZERO);
+            log.info("NWorker["+group+"] run on QueueWorker["+subject+"] successfully.");
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
 }

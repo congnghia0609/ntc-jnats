@@ -32,8 +32,16 @@ public class Pub {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // Case 1: PubSub.
-        String subj = "msg.test";
+//        // Case 1: PubSub.
+//        String subj = "msg.test";
+//        for (int i=0; i<10; i++) {
+//            String msg = "hello " + i;
+//            NPub.getInstance("pub-notify").publish(subj, msg);
+//            log.info("Published PubSub ["+subj+"] : '"+msg+"'");
+//        }
+        
+        // Case 2: Worker Queue Group.
+        String subj = "worker.email";
         for (int i=0; i<10; i++) {
             String msg = "hello " + i;
             NPub.getInstance("pub-notify").publish(subj, msg);

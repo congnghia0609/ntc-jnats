@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ntc.jnats.nsub;
+package com.ntc.jnats.nworker;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -28,41 +28,41 @@ import org.slf4j.LoggerFactory;
  * @author nghiatc
  * @since Dec 20, 2019
  */
-public class NSubGroup {
-    private final Logger log = LoggerFactory.getLogger(NSubGroup.class);
-    private List<NSub> subscribers = new LinkedList<NSub>();
+public class NWorkerGroup {
+    private final Logger log = LoggerFactory.getLogger(NWorkerGroup.class);
+    private List<NWorker> workers = new LinkedList<NWorker>();
 
-    public NSubGroup() {
+    public NWorkerGroup() {
     }
 
-    public List<NSub> getSubscribers() {
-        return subscribers;
+    public List<NWorker> getWorkers() {
+        return workers;
     }
     
-    public void add(NSub subscriber) {
-        subscribers.add(subscriber);
+    public void add(NWorker worker) {
+        workers.add(worker);
     }
     
     public int start(){
         try {
-            for(NSub sub : subscribers){
-                startNSub(sub);
+            for(NWorker worker : workers){
+                startNWorker(worker);
             }
         } catch (Exception e) {
-            log.error("NSubGroup.start: " + e.getMessage(), e);
-            System.out.println("NSubGroup start error !!!");
+            log.error("NWorkerGroup.start: " + e.getMessage(), e);
+            System.out.println("NWorkerGroup start error !!!");
             return -1;
         }
-        System.out.println("NSubGroup start successfully !!!");
+        System.out.println("NWorkerGroup start successfully !!!");
         return 0;
     }
     
-    private int startNSub(NSub sub){
+    private int startNWorker(NWorker worker){
         try {
             ExecutorService executor = Executors.newFixedThreadPool(1);
-            executor.execute(sub);
+            executor.execute(worker);
         } catch (Exception e) {
-            log.error("NSubGroup.startNSub fail...", e);
+            log.error("NWorkerGroup.startNWorker fail...", e);
             return -1;
         }
         return 0;

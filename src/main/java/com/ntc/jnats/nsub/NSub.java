@@ -53,7 +53,7 @@ public abstract class NSub implements Runnable {
         return subject;
     }
 
-    public NConnection getNconn() {
+    public NConnection getNConn() {
         return nconn;
     }
 
@@ -74,6 +74,10 @@ public abstract class NSub implements Runnable {
         if (dispatcher != null) {
             dispatcher.unsubscribe(subject);
         }
+    }
+    
+    public void close() throws InterruptedException{
+        nconn.close();
     }
 
     public abstract void execute(byte[] data);
