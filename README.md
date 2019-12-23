@@ -49,7 +49,7 @@ public static void main(String[] args) {
 ```
 
 ## Queue Groups
-![Queue Groups](/img/queue.png){:width="530px"}
+![Queue Groups](/img/queue.png){:height="50%" width="50%"}
 
 
 ### Queue Worker
@@ -87,7 +87,7 @@ public static void main(String[] args) {
 ```
 
 ## Request-Reply
-![Request-Reply](/img/reqres.png){:width="530px"}
+![Request-Reply](/img/reqres.png){:height="50%" width="50%"}
 
 ### Request
 ```java
