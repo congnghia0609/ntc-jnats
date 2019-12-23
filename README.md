@@ -50,7 +50,7 @@ public static void main(String[] args) {
 
 ## Queue Groups
 ![Queue Groups](/img/queue.png){:height="50%" width="50%"}
-
+[[/img/queue.png | width=530px | alt=QueueGroups]]
 
 ### Queue Worker
 ```java
