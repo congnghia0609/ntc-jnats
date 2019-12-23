@@ -2,7 +2,7 @@
 ntc-jnats is module [NAST](https://nats.io/) java client.  
 
 ## Publish-Subscribe
-![Publish-Subscribe](/img/pubsub.png "Publish-Subscribe")
+![Publish-Subscribe](/img/pubsub.png)
 
 ### Publisher
 ```java
@@ -49,7 +49,7 @@ public static void main(String[] args) {
 ```
 
 ## Queue Groups
-![Queue Groups](/img/queue.png | width=530 "Queue Groups")
+![Queue Groups](/img/queue.png | width=530)
 
 
 ### Queue Worker
@@ -87,7 +87,7 @@ public static void main(String[] args) {
 ```
 
 ## Request-Reply
-![Request-Reply](/img/reqres.png | width=530 "Request-Reply")
+![Request-Reply](/img/reqres.png | width=530)
 
 ### Request
 ```java
