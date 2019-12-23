@@ -1,10 +1,10 @@
 # ntc-jnats
 ntc-jnats is module [NAST](https://nats.io/) java client.  
 
-# Publish-Subscribe
+## Publish-Subscribe
 ![Publish-Subscribe](/img/pubsub.png "Publish-Subscribe")
 
-## Publisher
+### Publisher
 ```java
 String subj = "msg.test";
 for (int i=0; i<10; i++) {
@@ -14,7 +14,7 @@ for (int i=0; i<10; i++) {
 }
 ```
 
-## Subscriber
+### Subscriber
 ```java
 public static class NSubscriber extends NSub {
     private final Logger log = LoggerFactory.getLogger(NSubscriber.class);
@@ -48,7 +48,11 @@ public static void main(String[] args) {
 }
 ```
 
-## Queue Worker
+## Queue Groups
+![Queue Groups](/img/queue.png "Queue Groups")
+
+
+### Queue Worker
 ```java
 public static class NWorkerEmail extends NWorker {
     private final Logger log = LoggerFactory.getLogger(NWorkerEmail.class);
@@ -82,7 +86,10 @@ public static void main(String[] args) {
 }
 ```
 
-## Request
+## Request-Reply
+![Request-Reply](/img/reqres.png "Request-Reply")
+
+### Request
 ```java
 String subj = "reqres";
 for (int i=0; i<10; i++) {
@@ -93,7 +100,7 @@ for (int i=0; i<10; i++) {
 }
 ```
 
-## Respond
+### Respond
 ```java
 public static class NResQueryDB extends NRes {
     private final Logger log = LoggerFactory.getLogger(NResQueryDB.class);
