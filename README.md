@@ -2,7 +2,7 @@
 ntc-jnats is module [NAST](https://nats.io/) java client.  
 
 # Publish-Subscribe
-[Publish-Subscribe](/img/pubsub.png "Publish-Subscribe")
+![Publish-Subscribe](/img/pubsub.png "Publish-Subscribe")
 
 ## Publisher
 ```java
