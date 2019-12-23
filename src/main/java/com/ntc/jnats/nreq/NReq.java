@@ -98,13 +98,21 @@ public class NReq {
     public NConnection getNConn() {
         return nConn;
     }
+
+    public Duration getTimeout() {
+        return timeout;
+    }
     
     public boolean isOpen() {
         return this.nConn.getConnection().getStatus() == Connection.Status.CONNECTED;
     }
     
-    public void close() throws InterruptedException {
-        this.nConn.close();
+    public void close() {
+        try {
+            this.nConn.close();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
     }
     
     public Message publish(String subject, String msg) {

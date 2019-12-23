@@ -95,8 +95,12 @@ public class NPub {
         return this.nConn.getConnection().getStatus() == Status.CONNECTED;
     }
     
-    public void close() throws InterruptedException {
-        this.nConn.close();
+    public void close() {
+        try {
+            this.nConn.close();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
     }
     
     public int publish(String subject, String msg) {
