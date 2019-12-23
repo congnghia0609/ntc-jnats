@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ntc.jnats.nworker;
+package com.ntc.jnats.nres;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -26,43 +26,43 @@ import org.slf4j.LoggerFactory;
 /**
  *
  * @author nghiatc
- * @since Dec 20, 2019
+ * @since Dec 23, 2019
  */
-public class NWorkerGroup {
-    private final Logger log = LoggerFactory.getLogger(NWorkerGroup.class);
-    private List<NWorker> workers = new LinkedList<>();
+public class NResGroup {
+    private final Logger log = LoggerFactory.getLogger(NResGroup.class);
+    private List<NRes> responces = new LinkedList<>();
 
-    public NWorkerGroup() {
+    public NResGroup() {
     }
 
-    public List<NWorker> getWorkers() {
-        return workers;
+    public List<NRes> getResponces() {
+        return responces;
     }
     
-    public void add(NWorker worker) {
-        workers.add(worker);
+    public void add(NRes res) {
+        responces.add(res);
     }
     
     public int start(){
         try {
-            for(NWorker worker : workers){
-                startNWorker(worker);
+            for(NRes res : responces){
+                startNRes(res);
             }
         } catch (Exception e) {
-            log.error("NWorkerGroup.start: " + e.getMessage(), e);
-            System.out.println("NWorkerGroup start error !!!");
+            log.error("NResGroup.start: " + e.getMessage(), e);
+            System.out.println("NResGroup start error !!!");
             return -1;
         }
-        System.out.println("NWorkerGroup start successfully !!!");
+        System.out.println("NResGroup start successfully !!!");
         return 0;
     }
     
-    private int startNWorker(NWorker worker){
+    private int startNRes(NRes res){
         try {
             ExecutorService executor = Executors.newFixedThreadPool(1);
-            executor.execute(worker);
+            executor.execute(res);
         } catch (Exception e) {
-            log.error("NWorkerGroup.startNWorker fail...", e);
+            log.error("NResGroup.startNRes fail...", e);
             return -1;
         }
         return 0;

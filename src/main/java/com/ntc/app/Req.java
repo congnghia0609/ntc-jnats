@@ -38,8 +38,8 @@ public class Req {
         for (int i=0; i<10; i++) {
             String msg = "this is request " + i;
             Message resp = NReq.getInstance("req-db").publish(subj, msg);
-            log.info("Published ["+subj+"] : '"+msg+"'");
-            log.info("Received  ["+resp.getSubject()+"] : '"+new String(resp.getData(), StandardCharsets.UTF_8)+"'");
+            log.info("NReq Requested ["+subj+"] : '"+msg+"'");
+            log.info("NReq Received  ["+resp.getSubject()+"] : '"+new String(resp.getData(), StandardCharsets.UTF_8)+"'");
         }
     }
 }

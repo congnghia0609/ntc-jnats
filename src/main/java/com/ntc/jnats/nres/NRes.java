@@ -16,11 +16,103 @@
 
 package com.ntc.jnats.nres;
 
+import com.ntc.configer.NConfig;
+import com.ntc.jnats.NConnection;
+import io.nats.client.Dispatcher;
+import io.nats.client.Message;
+import io.nats.client.MessageHandler;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  *
  * @author nghiatc
  * @since Dec 19, 2019
  */
-public class NRes {
+public abstract class NRes implements Runnable {
+    private static final Logger log = LoggerFactory.getLogger(NRes.class);
+    private String id;
+    private String group;
+    private String subject;
+    private NConnection nconn;
+    private Dispatcher dispatcher;
 
+    public NRes(String name) throws IOException, InterruptedException {
+        this.group = NConfig.getConfig().getString(name+".group", name);
+        this.subject = NConfig.getConfig().getString(name+".subject", name);
+        this.nconn = new NConnection(name);
+        this.id = this.nconn.getOpt().getConnectionName();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public NConnection getNConn() {
+        return nconn;
+    }
+
+    public Dispatcher getDispatcher() {
+        return dispatcher;
+    }
+    
+    // Stop receive message SAFE.
+    public CompletableFuture<Boolean> drain() throws InterruptedException {
+        if (dispatcher != null) {
+            return dispatcher.drain(Duration.ZERO); // The time to wait for the drain to succeed, pass 0 to wait forever.
+        }
+        return null;
+    }
+    
+    // Stop receive message UNSAFE.
+    public void unsubscribe() {
+        if (dispatcher != null) {
+            dispatcher.unsubscribe(subject);
+        }
+    }
+    
+    public void close() throws InterruptedException{
+        nconn.close();
+    }
+
+    public abstract void execute(Message msg);
+    
+    public void reply(Message msg, String data) {
+        try {
+            if (msg != null && data != null && !data.isEmpty()) {
+                nconn.getConnection().publish(msg.getReplyTo(), data.getBytes(StandardCharsets.UTF_8));
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void run() {
+        try {
+            dispatcher = nconn.getConnection().createDispatcher(new MessageHandler() {
+                @Override
+                public void onMessage(Message msg) throws InterruptedException {
+                    execute(msg);
+                }
+            });
+            dispatcher.subscribe(subject, group);
+            nconn.getConnection().flush(Duration.ZERO);
+            log.info("NRes["+id+"] is listening on Subject["+subject+"].");
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
 }
