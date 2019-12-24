@@ -69,7 +69,7 @@ public class NConnection {
         long timeout = NConfig.getConfig().getLong(name+".timeout", 0);
         Duration connnectTimeout = timeout > 0 ? Duration.ofSeconds(timeout) : Options.DEFAULT_CONNECTION_TIMEOUT;
         Options.Builder b = new Options.Builder()
-                                .server(this.url)
+                                //.server(this.url)
                                 .connectionName(name + "_" + UUID.randomUUID().toString())
                                 .connectionTimeout(connnectTimeout) // Set the timeout for connection attempts.
                                 .maxReconnects(-1) // Use -1 to turn on infinite reconnects.
@@ -95,6 +95,9 @@ public class NConnection {
                                         System.out.println("Status change "+type);
                                     }
                                 });
+        System.out.println("url: " + this.url);
+        String[] arrUrl = this.url.split(";");
+        b = b.servers(arrUrl);
         if (!username.isEmpty() && !password.isEmpty()) {
             b = b.userInfo(username.toCharArray(), password.toCharArray());
         }
