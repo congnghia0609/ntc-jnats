@@ -37,7 +37,7 @@ public class Pub {
 //        for (int i=0; i<10; i++) {
 //            String msg = "hello " + i;
 //            NPub.getInstance("pub-notify").publish(subj, msg);
-//            log.info("Published PubSub ["+subj+"] : '"+msg+"'");
+//            log.info("Published PubSub["+subj+"] : '"+msg+"'");
 //        }
         
         // Case 2: Worker Queue Group.
@@ -45,7 +45,7 @@ public class Pub {
         for (int i=0; i<10; i++) {
             String msg = "hello " + i;
             NPub.getInstance("pub-notify").publish(subj, msg);
-            log.info("Published PubSub ["+subj+"] : '"+msg+"'");
+            log.info("Published QueueWorker["+subj+"] : '"+msg+"'");
         }
     }
 }

@@ -10,7 +10,7 @@ String subj = "msg.test";
 for (int i=0; i<10; i++) {
     String msg = "hello " + i;
     NPub.getInstance("pub-notify").publish(subj, msg);
-    log.info("Published PubSub ["+subj+"] : '"+msg+"'");
+    log.info("Published PubSub["+subj+"] : '"+msg+"'");
 }
 ```
 
@@ -91,7 +91,7 @@ String subj = "worker.email";
 for (int i=0; i<10; i++) {
     String msg = "hello " + i;
     NPub.getInstance("pub-notify").publish(subj, msg);
-    log.info("Published PubSub ["+subj+"] : '"+msg+"'");
+    log.info("Published QueueWorker["+subj+"] : '"+msg+"'");
 }
 ```
 
