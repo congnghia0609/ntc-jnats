@@ -1,7 +1,7 @@
 # ntc-jnats
 ntc-jnats is module [NAST](https://nats.io/) java client.  
 
-## Publish-Subscribe
+## 1. Publish-Subscribe
 ![Publish-Subscribe](/img/pubsub.png)
 
 ### Publisher
@@ -48,7 +48,7 @@ public static void main(String[] args) {
 }
 ```
 
-## Queue Groups
+## 2. Queue Groups
 ![Queue Groups](/img/queue.png) <!-- .element height="50%" width="50%" -->
 
 ### Queue Worker
@@ -85,7 +85,7 @@ public static void main(String[] args) {
 }
 ```
 
-## Request-Reply
+## 3. Request-Reply
 ![Request-Reply](/img/reqres.png) <!-- .element height="50%" width="50%" -->
 
 ### Request
