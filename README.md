@@ -85,6 +85,16 @@ public static void main(String[] args) {
 }
 ```
 
+### Publisher
+```java
+String subj = "worker.email";
+for (int i=0; i<10; i++) {
+    String msg = "hello " + i;
+    NPub.getInstance("pub-notify").publish(subj, msg);
+    log.info("Published PubSub ["+subj+"] : '"+msg+"'");
+}
+```
+
 ## 3. Request-Reply
 ![Request-Reply](/img/reqres.png) <!-- .element height="50%" width="50%" -->
 
@@ -99,7 +109,7 @@ for (int i=0; i<10; i++) {
 }
 ```
 
-### Respond
+### Reply
 ```java
 public static class NResQueryDB extends NRes {
     private final Logger log = LoggerFactory.getLogger(NResQueryDB.class);
