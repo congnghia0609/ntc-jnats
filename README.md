@@ -1,5 +1,5 @@
 # ntc-jnats
-ntc-jnats is module [NAST](https://nats.io/) java client.  
+ntc-jnats is module [NATS](https://nats.io/) java client.  
 
 ## 1. Publish-Subscribe
 ![Publish-Subscribe](/img/pubsub.png)
