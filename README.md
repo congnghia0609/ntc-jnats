@@ -24,10 +24,10 @@ public static class NSubscriber extends NSub {
     }
 
     @Override
-    public void execute(byte[] data) {
+    public void execute(Message msg) {
         try {
-            String msg = new String(data, StandardCharsets.UTF_8);
-            log.info("NSubscriber received on PubSub ["+getSubject()+"]: '"+msg+"'");
+            String data = new String(msg.getData(), StandardCharsets.UTF_8);
+            log.info("NSubscriber received on PubSub ["+getSubject()+"]: '"+data+"'");
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -61,10 +61,10 @@ public static class NWorkerEmail extends NWorker {
     }
 
     @Override
-    public void execute(byte[] data) {
+    public void execute(Message msg) {
         try {
-            String msg = new String(data, StandardCharsets.UTF_8);
-            log.info("NWorkerEmail["+getGroup()+"] received on QueueWorker["+getSubject()+"]: '"+msg+"'");
+            String data = new String(msg.getData(), StandardCharsets.UTF_8);
+            log.info("NWorkerEmail["+getGroup()+"] received on QueueWorker["+getSubject()+"]: '"+data+"'");
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

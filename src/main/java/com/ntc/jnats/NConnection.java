@@ -71,7 +71,7 @@ public class NConnection {
         Options.Builder b = new Options.Builder()
                                 //.server(this.url)
                                 .connectionName(name + "_" + UUID.randomUUID().toString())
-                                .connectionTimeout(connnectTimeout) // Set the timeout for connection attempts.
+                                .connectionTimeout(connnectTimeout) // Set the timeout for connection attempts. Default: 2 seconds.
                                 .maxReconnects(-1) // Use -1 to turn on infinite reconnects.
                                 .errorListener(new ErrorListener(){
                                     @Override

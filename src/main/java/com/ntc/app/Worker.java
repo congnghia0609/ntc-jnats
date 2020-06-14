@@ -18,6 +18,7 @@ package com.ntc.app;
 
 import com.ntc.jnats.nworker.NWorker;
 import com.ntc.jnats.nworker.NWorkerGroup;
+import io.nats.client.Message;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
@@ -54,10 +55,10 @@ public class Worker {
         }
         
         @Override
-        public void execute(byte[] data) {
+        public void execute(Message msg) {
             try {
-                String msg = new String(data, StandardCharsets.UTF_8);
-                log.info("NWorkerEmail["+getGroup()+"] received on QueueWorker["+getSubject()+"]: '"+msg+"'");
+                String data = new String(msg.getData(), StandardCharsets.UTF_8);
+                log.info("NWorkerEmail["+getGroup()+"] received on QueueWorker["+getSubject()+"]: '"+data+"'");
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }

@@ -18,6 +18,7 @@ package com.ntc.app;
 
 import com.ntc.jnats.nsub.NSub;
 import com.ntc.jnats.nsub.NSubGroup;
+import io.nats.client.Message;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
@@ -54,10 +55,10 @@ public class Sub {
         }
         
         @Override
-        public void execute(byte[] data) {
+        public void execute(Message msg) {
             try {
-                String msg = new String(data, StandardCharsets.UTF_8);
-                log.info("NSubscriber received on PubSub ["+getSubject()+"]: '"+msg+"'");
+                String data = new String(msg.getData(), StandardCharsets.UTF_8);
+                log.info("NSubscriber received on PubSub ["+getSubject()+"]: '"+data+"'");
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }

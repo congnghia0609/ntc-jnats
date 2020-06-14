@@ -86,7 +86,7 @@ public abstract class NWorker implements Runnable {
         nconn.close();
     }
 
-    public abstract void execute(byte[] data);
+    public abstract void execute(Message msg);
     
     @Override
     public void run() {
@@ -94,7 +94,7 @@ public abstract class NWorker implements Runnable {
             dispatcher = nconn.getConnection().createDispatcher(new MessageHandler() {
                 @Override
                 public void onMessage(Message msg) throws InterruptedException {
-                    execute(msg.getData());
+                    execute(msg);
                 }
             });
             dispatcher.subscribe(subject, group);
