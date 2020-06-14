@@ -6,7 +6,7 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>ntc-jnats</name>
-    <description>ntc-jnats is module NAST java client</description>
+    <description>ntc-jnats is a module NAST java client</description>
     <url>https://github.com/congnghia0609/ntc-jnats</url>
     
     <properties>
@@ -88,7 +88,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>2.5</version>
+                <version>3.1.0</version>
                 <configuration>
                     <filesets>
                         <fileset>
@@ -104,7 +104,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -144,7 +144,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.5</version>
+                <version>3.2.0</version>
                 <configuration>
                     <outputDirectory>${project.basedir}/dist/</outputDirectory>
                     <archive>
