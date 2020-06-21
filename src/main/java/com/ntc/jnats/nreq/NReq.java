@@ -59,39 +59,24 @@ public class NReq {
             return null;
         }
         NReq instance = mapNRequest.containsKey(name) ? mapNRequest.get(name) : null;
-		if(instance == null) {
+		if(instance == null || !instance.isOpen()) {
 			lock.lock();
 			try {
                 instance = mapNRequest.containsKey(name) ? mapNRequest.get(name) : null;
 				if(instance == null) {
 					instance = new NReq(name);
                     mapNRequest.put(name, instance);
-				} else {
-                    if (!instance.isOpen()) {
-                        instance.close();
-                        instance = new NReq(name);
-                        mapNRequest.put(name, instance);
-                    }
+				} else if (!instance.isOpen()) {
+                    instance.close();
+                    instance = new NReq(name);
+                    mapNRequest.put(name, instance);
                 }
 			} catch (Exception e) {
                 log.error(e.getMessage(), e);
             } finally {
 				lock.unlock();
 			}
-		} else {
-            if (!instance.isOpen()) {
-                lock.lock();
-                try {
-                    instance.close();
-                    instance = new NReq(name);
-                    mapNRequest.put(name, instance);
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
-                } finally {
-                    lock.unlock();
-                }
-            }
-        }
+		}
 		return instance;
 	}
 
@@ -141,11 +126,50 @@ public class NReq {
         }
     }
     
+    public Message publish(String subject, byte[] msg) {
+        Message ret = null;
+        try {
+            if (!subject.isEmpty() && msg != null) {
+                ret = this.nConn.getConnection().request(subject, msg, this.timeout);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            return ret;
+        }
+    }
+    
+    public Message publish(String subject, byte[] msg, Duration timeout) {
+        Message ret = null;
+        try {
+            if (!subject.isEmpty() && msg != null) {
+                ret = this.nConn.getConnection().request(subject, msg, timeout);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            return ret;
+        }
+    }
+    
     public CompletableFuture<Message> publishAsyn(String subject, String msg) {
         CompletableFuture<Message> ret = null;
         try {
             if (!subject.isEmpty() && !msg.isEmpty()) {
                 ret = this.nConn.getConnection().request(subject, msg.getBytes(StandardCharsets.UTF_8));
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            return ret;
+        }
+    }
+    
+    public CompletableFuture<Message> publishAsyn(String subject, byte[] msg) {
+        CompletableFuture<Message> ret = null;
+        try {
+            if (!subject.isEmpty() && msg != null) {
+                ret = this.nConn.getConnection().request(subject, msg);
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);

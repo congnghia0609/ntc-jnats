@@ -51,39 +51,24 @@ public class NPub {
             return null;
         }
         NPub instance = mapNPublisher.containsKey(name) ? mapNPublisher.get(name) : null;
-		if(instance == null) {
+		if(instance == null || !instance.isOpen()) {
 			lock.lock();
 			try {
                 instance = mapNPublisher.containsKey(name) ? mapNPublisher.get(name) : null;
 				if(instance == null) {
 					instance = new NPub(name);
                     mapNPublisher.put(name, instance);
-				} else {
-                    if (!instance.isOpen()) {
-                        instance.close();
-                        instance = new NPub(name);
-                        mapNPublisher.put(name, instance);
-                    }
+				} else if (!instance.isOpen()) {
+                    instance.close();
+                    instance = new NPub(name);
+                    mapNPublisher.put(name, instance);
                 }
 			} catch (Exception e) {
                 log.error(e.getMessage(), e);
             } finally {
 				lock.unlock();
 			}
-		} else {
-            if (!instance.isOpen()) {
-                lock.lock();
-                try {
-                    instance.close();
-                    instance = new NPub(name);
-                    mapNPublisher.put(name, instance);
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
-                } finally {
-                    lock.unlock();
-                }
-            }
-        }
+		}
 		return instance;
 	}
 
@@ -108,6 +93,21 @@ public class NPub {
         try {
             if (!subject.isEmpty() && !msg.isEmpty()) {
                 this.nConn.getConnection().publish(subject, msg.getBytes(StandardCharsets.UTF_8));
+                err = 0;
+            }
+        } catch (Exception e) {
+            err = -1;
+            log.error(e.getMessage(), e);
+        } finally {
+            return err;
+        }
+    }
+    
+    public int publish(String subject, byte[] msg) {
+        int err = -1;
+        try {
+            if (!subject.isEmpty() && msg != null) {
+                this.nConn.getConnection().publish(subject, msg);
                 err = 0;
             }
         } catch (Exception e) {
