@@ -1,6 +1,15 @@
 # ntc-jnats
 ntc-jnats is a module [NATS](https://nats.io/) java client.  
 
+## Maven
+```Xml
+<dependency>
+    <groupId>com.streetcodevn</groupId>
+    <artifactId>ntc-jnats</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
 ## 1. Publish-Subscribe
 ![Publish-Subscribe](/img/pubsub.png)
 
