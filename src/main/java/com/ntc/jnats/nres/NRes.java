@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.ntc.jnats.nres;
 
 import com.ntc.configer.NConfig;
@@ -34,6 +33,7 @@ import org.slf4j.LoggerFactory;
  * @since Dec 19, 2019
  */
 public abstract class NRes implements Runnable {
+
     private static final Logger log = LoggerFactory.getLogger(NRes.class);
     private String id;
     private String group;
@@ -42,8 +42,8 @@ public abstract class NRes implements Runnable {
     private Dispatcher dispatcher;
 
     public NRes(String name) throws IOException, InterruptedException {
-        this.group = NConfig.getConfig().getString(name+".group", name);
-        this.subject = NConfig.getConfig().getString(name+".subject", name);
+        this.group = NConfig.getConfig().getString(name + ".group", name);
+        this.subject = NConfig.getConfig().getString(name + ".subject", name);
         this.nconn = new NConnection(name);
         this.id = this.nconn.getOpt().getConnectionName();
     }
@@ -67,7 +67,7 @@ public abstract class NRes implements Runnable {
     public Dispatcher getDispatcher() {
         return dispatcher;
     }
-    
+
     // Stop receive message SAFE.
     public CompletableFuture<Boolean> drain() throws InterruptedException {
         if (dispatcher != null) {
@@ -75,20 +75,20 @@ public abstract class NRes implements Runnable {
         }
         return null;
     }
-    
+
     // Stop receive message UNSAFE.
     public void unsubscribe() {
         if (dispatcher != null) {
             dispatcher.unsubscribe(subject);
         }
     }
-    
-    public void close() throws InterruptedException{
+
+    public void close() throws InterruptedException {
         nconn.close();
     }
 
     public abstract void execute(Message msg);
-    
+
     public void reply(Message msg, String data) {
         try {
             if (msg != null && data != null && !data.isEmpty()) {
@@ -110,7 +110,7 @@ public abstract class NRes implements Runnable {
             });
             dispatcher.subscribe(subject, group);
             nconn.getConnection().flush(Duration.ZERO);
-            log.info("NRes["+id+"] is listening on Subject["+subject+"].");
+            log.info("NRes[" + id + "] is listening on Subject[" + subject + "].");
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

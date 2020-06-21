@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.ntc.jnats.npub;
-
 
 import com.ntc.jnats.NConnection;
 import io.nats.client.Connection.Status;
@@ -34,6 +32,7 @@ import org.slf4j.LoggerFactory;
  * @since Dec 19, 2019
  */
 public class NPub {
+
     private static final Logger log = LoggerFactory.getLogger(NPub.class);
     private static Map<String, NPub> mapNPublisher = new ConcurrentHashMap<>();
     private static Lock lock = new ReentrantLock();
@@ -41,45 +40,45 @@ public class NPub {
 
     private NPub() {
     }
-    
+
     public NPub(String name) throws IOException, InterruptedException {
         this.nConn = new NConnection(name);
     }
-    
+
     public static NPub getInstance(String name) {
-        if(name == null || name.isEmpty()) {
+        if (name == null || name.isEmpty()) {
             return null;
         }
         NPub instance = mapNPublisher.containsKey(name) ? mapNPublisher.get(name) : null;
-		if(instance == null || !instance.isOpen()) {
-			lock.lock();
-			try {
+        if (instance == null || !instance.isOpen()) {
+            lock.lock();
+            try {
                 instance = mapNPublisher.containsKey(name) ? mapNPublisher.get(name) : null;
-				if(instance == null) {
-					instance = new NPub(name);
+                if (instance == null) {
+                    instance = new NPub(name);
                     mapNPublisher.put(name, instance);
-				} else if (!instance.isOpen()) {
+                } else if (!instance.isOpen()) {
                     instance.close();
                     instance = new NPub(name);
                     mapNPublisher.put(name, instance);
                 }
-			} catch (Exception e) {
+            } catch (Exception e) {
                 log.error(e.getMessage(), e);
             } finally {
-				lock.unlock();
-			}
-		}
-		return instance;
-	}
+                lock.unlock();
+            }
+        }
+        return instance;
+    }
 
     public NConnection getNConn() {
         return nConn;
     }
-    
+
     public boolean isOpen() {
         return this.nConn.getConnection().getStatus() == Status.CONNECTED;
     }
-    
+
     public void close() {
         try {
             this.nConn.close();
@@ -87,7 +86,7 @@ public class NPub {
             log.error(e.getMessage(), e);
         }
     }
-    
+
     public int publish(String subject, String msg) {
         int err = -1;
         try {
@@ -102,7 +101,7 @@ public class NPub {
             return err;
         }
     }
-    
+
     public int publish(String subject, byte[] msg) {
         int err = -1;
         try {

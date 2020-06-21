@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.ntc.jnats.nres;
 
 import java.util.LinkedList;
@@ -29,6 +28,7 @@ import org.slf4j.LoggerFactory;
  * @since Dec 23, 2019
  */
 public class NResGroup {
+
     private final Logger log = LoggerFactory.getLogger(NResGroup.class);
     private List<NRes> responces = new LinkedList<>();
 
@@ -38,14 +38,14 @@ public class NResGroup {
     public List<NRes> getResponces() {
         return responces;
     }
-    
+
     public void add(NRes res) {
         responces.add(res);
     }
-    
-    public int start(){
+
+    public int start() {
         try {
-            for(NRes res : responces){
+            for (NRes res : responces) {
                 startNRes(res);
             }
         } catch (Exception e) {
@@ -56,8 +56,8 @@ public class NResGroup {
         System.out.println("NResGroup start successfully !!!");
         return 0;
     }
-    
-    private int startNRes(NRes res){
+
+    private int startNRes(NRes res) {
         try {
             ExecutorService executor = Executors.newFixedThreadPool(1);
             executor.execute(res);

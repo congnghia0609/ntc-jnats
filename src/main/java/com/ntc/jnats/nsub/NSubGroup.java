@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.ntc.jnats.nsub;
 
 import java.util.LinkedList;
@@ -29,6 +28,7 @@ import org.slf4j.LoggerFactory;
  * @since Dec 20, 2019
  */
 public class NSubGroup {
+
     private final Logger log = LoggerFactory.getLogger(NSubGroup.class);
     private List<NSub> subscribers = new LinkedList<NSub>();
 
@@ -38,14 +38,14 @@ public class NSubGroup {
     public List<NSub> getSubscribers() {
         return subscribers;
     }
-    
+
     public void add(NSub subscriber) {
         subscribers.add(subscriber);
     }
-    
-    public int start(){
+
+    public int start() {
         try {
-            for(NSub sub : subscribers){
+            for (NSub sub : subscribers) {
                 startNSub(sub);
             }
         } catch (Exception e) {
@@ -56,8 +56,8 @@ public class NSubGroup {
         System.out.println("NSubGroup start successfully !!!");
         return 0;
     }
-    
-    private int startNSub(NSub sub){
+
+    private int startNSub(NSub sub) {
         try {
             ExecutorService executor = Executors.newFixedThreadPool(1);
             executor.execute(sub);

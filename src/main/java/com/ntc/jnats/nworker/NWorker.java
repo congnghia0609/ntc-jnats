@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.ntc.jnats.nworker;
 
 import com.ntc.configer.NConfig;
@@ -33,6 +32,7 @@ import org.slf4j.LoggerFactory;
  * @since Dec 19, 2019
  */
 public abstract class NWorker implements Runnable {
+
     private static final Logger log = LoggerFactory.getLogger(NWorker.class);
     private String id;
     private String group;
@@ -41,8 +41,8 @@ public abstract class NWorker implements Runnable {
     private Dispatcher dispatcher;
 
     public NWorker(String name) throws IOException, InterruptedException {
-        this.group = NConfig.getConfig().getString(name+".group", name);
-        this.subject = NConfig.getConfig().getString(name+".subject", name);
+        this.group = NConfig.getConfig().getString(name + ".group", name);
+        this.subject = NConfig.getConfig().getString(name + ".subject", name);
         this.nconn = new NConnection(name);
         this.id = this.nconn.getOpt().getConnectionName();
     }
@@ -66,7 +66,7 @@ public abstract class NWorker implements Runnable {
     public Dispatcher getDispatcher() {
         return dispatcher;
     }
-    
+
     // Stop receive message SAFE.
     public CompletableFuture<Boolean> drain() throws InterruptedException {
         if (dispatcher != null) {
@@ -74,20 +74,20 @@ public abstract class NWorker implements Runnable {
         }
         return null;
     }
-    
+
     // Stop receive message UNSAFE.
     public void unsubscribe() {
         if (dispatcher != null) {
             dispatcher.unsubscribe(subject);
         }
     }
-    
-    public void close() throws InterruptedException{
+
+    public void close() throws InterruptedException {
         nconn.close();
     }
 
     public abstract void execute(Message msg);
-    
+
     @Override
     public void run() {
         try {
@@ -99,7 +99,7 @@ public abstract class NWorker implements Runnable {
             });
             dispatcher.subscribe(subject, group);
             nconn.getConnection().flush(Duration.ZERO);
-            log.info("NWorker["+group+"] run on QueueWorker["+subject+"] successfully.");
+            log.info("NWorker[" + group + "] run on QueueWorker[" + subject + "] successfully.");
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

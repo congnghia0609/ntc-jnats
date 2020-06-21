@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.ntc.jnats.nworker;
 
 import java.util.LinkedList;
@@ -29,6 +28,7 @@ import org.slf4j.LoggerFactory;
  * @since Dec 20, 2019
  */
 public class NWorkerGroup {
+
     private final Logger log = LoggerFactory.getLogger(NWorkerGroup.class);
     private List<NWorker> workers = new LinkedList<>();
 
@@ -38,14 +38,14 @@ public class NWorkerGroup {
     public List<NWorker> getWorkers() {
         return workers;
     }
-    
+
     public void add(NWorker worker) {
         workers.add(worker);
     }
-    
-    public int start(){
+
+    public int start() {
         try {
-            for(NWorker worker : workers){
+            for (NWorker worker : workers) {
                 startNWorker(worker);
             }
         } catch (Exception e) {
@@ -56,8 +56,8 @@ public class NWorkerGroup {
         System.out.println("NWorkerGroup start successfully !!!");
         return 0;
     }
-    
-    private int startNWorker(NWorker worker){
+
+    private int startNWorker(NWorker worker) {
         try {
             ExecutorService executor = Executors.newFixedThreadPool(1);
             executor.execute(worker);

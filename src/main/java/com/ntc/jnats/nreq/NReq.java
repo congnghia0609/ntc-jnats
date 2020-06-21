@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.ntc.jnats.nreq;
 
 import com.ntc.configer.NConfig;
@@ -37,6 +36,7 @@ import org.slf4j.LoggerFactory;
  * @since Dec 19, 2019
  */
 public class NReq {
+
     private static final Logger log = LoggerFactory.getLogger(NReq.class);
     private static Map<String, NReq> mapNRequest = new ConcurrentHashMap<>();
     private static Lock lock = new ReentrantLock();
@@ -45,40 +45,40 @@ public class NReq {
 
     private NReq() {
     }
-    
+
     public NReq(String name) throws IOException, InterruptedException {
-        long timeout = NConfig.getConfig().getLong(name+".timeout", 0L);
+        long timeout = NConfig.getConfig().getLong(name + ".timeout", 0L);
         if (timeout > 0) {
             this.timeout = Duration.ofSeconds(timeout);
         }
         this.nConn = new NConnection(name);
     }
-    
+
     public static NReq getInstance(String name) {
-        if(name == null || name.isEmpty()) {
+        if (name == null || name.isEmpty()) {
             return null;
         }
         NReq instance = mapNRequest.containsKey(name) ? mapNRequest.get(name) : null;
-		if(instance == null || !instance.isOpen()) {
-			lock.lock();
-			try {
+        if (instance == null || !instance.isOpen()) {
+            lock.lock();
+            try {
                 instance = mapNRequest.containsKey(name) ? mapNRequest.get(name) : null;
-				if(instance == null) {
-					instance = new NReq(name);
+                if (instance == null) {
+                    instance = new NReq(name);
                     mapNRequest.put(name, instance);
-				} else if (!instance.isOpen()) {
+                } else if (!instance.isOpen()) {
                     instance.close();
                     instance = new NReq(name);
                     mapNRequest.put(name, instance);
                 }
-			} catch (Exception e) {
+            } catch (Exception e) {
                 log.error(e.getMessage(), e);
             } finally {
-				lock.unlock();
-			}
-		}
-		return instance;
-	}
+                lock.unlock();
+            }
+        }
+        return instance;
+    }
 
     public NConnection getNConn() {
         return nConn;
@@ -87,11 +87,11 @@ public class NReq {
     public Duration getTimeout() {
         return timeout;
     }
-    
+
     public boolean isOpen() {
         return this.nConn.getConnection().getStatus() == Connection.Status.CONNECTED;
     }
-    
+
     public void close() {
         try {
             this.nConn.close();
@@ -99,7 +99,7 @@ public class NReq {
             log.error(e.getMessage(), e);
         }
     }
-    
+
     public Message publish(String subject, String msg) {
         Message ret = null;
         try {
@@ -112,7 +112,7 @@ public class NReq {
             return ret;
         }
     }
-    
+
     public Message publish(String subject, String msg, Duration timeout) {
         Message ret = null;
         try {
@@ -125,7 +125,7 @@ public class NReq {
             return ret;
         }
     }
-    
+
     public Message publish(String subject, byte[] msg) {
         Message ret = null;
         try {
@@ -138,7 +138,7 @@ public class NReq {
             return ret;
         }
     }
-    
+
     public Message publish(String subject, byte[] msg, Duration timeout) {
         Message ret = null;
         try {
@@ -151,7 +151,7 @@ public class NReq {
             return ret;
         }
     }
-    
+
     public CompletableFuture<Message> publishAsyn(String subject, String msg) {
         CompletableFuture<Message> ret = null;
         try {
@@ -164,7 +164,7 @@ public class NReq {
             return ret;
         }
     }
-    
+
     public CompletableFuture<Message> publishAsyn(String subject, byte[] msg) {
         CompletableFuture<Message> ret = null;
         try {
